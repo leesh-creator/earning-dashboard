@@ -130,7 +130,7 @@
     </div>
     <span class="logo-text">어닝자산운용</span>
   </div>
-  <div class="topbar-right">기준일 <span id="updateDate">-</span></div>
+  <div class="topbar-right"><span id="userNameDisplay"></span>기준일 <span id="updateDate">-</span></div>
 </div>
 
 <div class="container">
@@ -208,7 +208,10 @@ function renderAll() {
     document.getElementById('fundTabs').innerHTML = '<p style="color:#999;font-size:13px;">데이터가 없습니다. generate.py를 실행해 주세요.</p>';
     return;
   }
-  document.getElementById('updateDate').textContent = FUND_DATA.updated;
+  const udEl = document.getElementById('updateDate');
+  if (udEl) udEl.textContent = FUND_DATA.updated;
+  const udEl2 = document.getElementById('updateDate2');
+  if (udEl2) udEl2.textContent = FUND_DATA.updated;
   renderTabs();
   renderFund(curFund);
 }
@@ -431,14 +434,10 @@ function doLogin() {
   }
 
   document.getElementById('loginOverlay').style.display = 'none';
-  document.querySelector('.topbar-right').innerHTML =
-    '<span style="color:var(--text-muted);font-size:12px;">' +
-    user.display_name + '님 &nbsp;|&nbsp; 기준일 ' +
-    '<span id="updateDate2"></span></span>';
+  const unEl = document.getElementById('userNameDisplay');
+  if (unEl) unEl.innerHTML = '<span style="color:var(--text-muted);font-size:12px;margin-right:12px;">' + user.display_name + '님</span>';
 
   renderAll();
-  const el2 = document.getElementById('updateDate2');
-  if (el2) el2.textContent = FUND_DATA.updated;
 }
 
 // Enter 키로도 로그인
