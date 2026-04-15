@@ -104,6 +104,10 @@
   .login-error { font-size:12px; color:#c0392b; margin-top:8px; min-height:18px; }
   .login-footer { font-size:11px; color:var(--text-faint); margin-top:1.25rem; }
 
+
+  .login-options { display:flex; justify-content:center; gap:20px; margin:8px 0 4px; }
+  .login-check-label { display:flex; align-items:center; gap:5px; font-size:12px; color:var(--text-muted); cursor:pointer; user-select:none; }
+  .login-check-label input[type=checkbox] { width:14px; height:14px; cursor:pointer; accent-color:var(--accent); }
 </style>
 </head>
 <body>
@@ -118,6 +122,14 @@
     <div class="login-sub">펀드 수익률 현황</div>
     <input class="login-input" type="text" id="loginInput" placeholder="접속 ID" autocomplete="off" />
     <input class="login-input" type="password" id="loginPw" placeholder="비밀번호" autocomplete="off" />
+    <div class="login-options">
+      <label class="login-check-label">
+        <input type="checkbox" id="saveId"> 아이디 저장
+      </label>
+      <label class="login-check-label">
+        <input type="checkbox" id="autoLogin"> 자동 로그인
+      </label>
+    </div>
     <button class="login-btn" onclick="doLogin()">로그인</button>
     <div class="login-error" id="loginError"></div>
     <div class="login-footer">문의: 어닝자산운용 (주)</div>
@@ -441,6 +453,7 @@ function doLogin() {
     return;
   }
 
+  saveLoginPrefs(id, pw);
   document.getElementById('loginOverlay').style.display = 'none';
   const unEl = document.getElementById('userNameDisplay');
   if (unEl) unEl.innerHTML = '<span style="color:var(--text-muted);font-size:12px;margin-right:12px;">' + user.display_name + '님</span>';
@@ -448,16 +461,59 @@ function doLogin() {
   renderAll();
 }
 
-// Enter 키로도 로그인
+// 저장된 로그인 정보 불러오기 + 자동 로그인 처리
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('loginInput');
-  if (input) {
-    input.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-    input.focus();
-    const pwInput = document.getElementById('loginPw');
-    if (pwInput) pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  const savedId    = localStorage.getItem('earning_saved_id') || '';
+  const savedPw    = localStorage.getItem('earning_saved_pw') || '';
+  const saveIdChk  = localStorage.getItem('earning_save_id') === '1';
+  const autoChk    = localStorage.getItem('earning_auto_login') === '1';
+
+  const idEl    = document.getElementById('loginInput');
+  const pwEl    = document.getElementById('loginPw');
+  const saveEl  = document.getElementById('saveId');
+  const autoEl  = document.getElementById('autoLogin');
+
+  if (saveIdChk && idEl) { idEl.value = savedId; if (saveEl) saveEl.checked = true; }
+  if (autoChk && idEl && pwEl) {
+    idEl.value = savedId;
+    pwEl.value = savedPw;
+    if (saveEl) saveEl.checked = true;
+    if (autoEl) autoEl.checked = true;
+    // 자동 로그인 실행 (데이터 로드 후)
+    setTimeout(doLogin, 100);
+    return;
   }
+
+  if (idEl) {
+    idEl.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    idEl.focus();
+  }
+  if (pwEl) pwEl.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 });
+
+function saveLoginPrefs(id, pw) {
+  const saveId    = document.getElementById('saveId');
+  const autoLogin = document.getElementById('autoLogin');
+  const doSaveId  = saveId && saveId.checked;
+  const doAuto    = autoLogin && autoLogin.checked;
+
+  if (doAuto) {
+    localStorage.setItem('earning_auto_login', '1');
+    localStorage.setItem('earning_save_id', '1');
+    localStorage.setItem('earning_saved_id', id);
+    localStorage.setItem('earning_saved_pw', pw);
+  } else if (doSaveId) {
+    localStorage.setItem('earning_save_id', '1');
+    localStorage.setItem('earning_auto_login', '0');
+    localStorage.setItem('earning_saved_id', id);
+    localStorage.removeItem('earning_saved_pw');
+  } else {
+    localStorage.setItem('earning_save_id', '0');
+    localStorage.setItem('earning_auto_login', '0');
+    localStorage.removeItem('earning_saved_id');
+    localStorage.removeItem('earning_saved_pw');
+  }
+}
 
 // 로그인 후 renderAll() 호출됨
 </script>
