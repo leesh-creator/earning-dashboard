@@ -22,7 +22,7 @@
     --radius-sm: 6px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+  body { overflow-x: hidden; font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
 
   .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
   .logo { display: flex; align-items: center; gap: 10px; }
@@ -32,7 +32,7 @@
   .topbar-right { font-size: 12px; color: var(--text-muted); }
   .topbar-right span { color: var(--text); font-weight: 500; }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; overflow-x: hidden; }
 
   .fund-tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
   .fund-tab { padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border-md); background: var(--surface); color: var(--text-muted); font-size: 13px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
@@ -85,6 +85,41 @@
 
   @media (max-width: 700px) {
     .metrics { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 0.75rem; }
+    .topbar { padding: 0 0.75rem; height: 48px; }
+    .logo-text { font-size: 13px; }
+    .topbar-right { font-size: 10px; }
+    .topbar-right button { display: none; }
+    .fund-full-name { font-size: 12px; }
+    .fund-info-bar { padding: 10px 12px; gap: 10px; }
+    .fund-meta-items { gap: 10px; }
+    .fund-meta-item { font-size: 11px; }
+    .metric { padding: 10px 12px; }
+    .metric-value { font-size: 18px; }
+    .metric-label { font-size: 10px; }
+    .metric-sub { font-size: 10px; }
+    .fund-tabs { gap: 5px; }
+    .fund-tab { font-size: 11px; padding: 5px 10px; }
+    .chart-card { padding: 12px; }
+    .chart-card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .chart-wrap { height: 200px; }
+    .range-btns { align-self: flex-end; }
+    .range-btn { font-size: 10px; padding: 3px 7px; }
+    .legend { gap: 8px; }
+    .legend-item { font-size: 10px; }
+    .table-card-header span { font-size: 11px; }
+    th { font-size: 10px; padding: 7px 8px; }
+    td { font-size: 11px; padding: 7px 8px; }
+    table { font-size: 11px; }
+    .login-card { width: 90%; padding: 2rem 1.5rem; }
+    .login-input { font-size: 14px; }
+  }
+  @media (max-width: 400px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric-value { font-size: 16px; }
+    th { font-size: 9px; padding: 6px 5px; }
+    td { font-size: 10px; padding: 6px 5px; }
+  }
     .container { padding: 1rem; }
     .topbar { padding: 0 1rem; }
     .fund-full-name { font-size: 13px; }
@@ -174,7 +209,7 @@
     <div class="bar-chart-wrap"><canvas id="barChart"></canvas></div>
   </div>
 
-  <div class="table-card">
+  <div class="table-card" style="overflow-x:auto;">
     <div class="table-card-header">
       <span>최근 10거래일</span>
       <span id="tableTitle"></span>
@@ -189,7 +224,7 @@
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
-    </table>
+    </table></div>
   </div>
 </div>
 
