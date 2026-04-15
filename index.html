@@ -143,7 +143,7 @@
     </div>
     <span class="logo-text">어닝자산운용</span>
   </div>
-  <div class="topbar-right"><span id="userNameDisplay"></span>기준일 <span id="updateDate">-</span></div>
+  <div class="topbar-right"><span id="userNameDisplay"></span>기준일 <span id="updateDate">-</span> &nbsp;<button onclick="doLogout()" style="font-size:11px;padding:3px 10px;border:1px solid var(--border-md);border-radius:4px;background:transparent;color:var(--text-muted);cursor:pointer;margin-left:8px;">로그아웃</button></div>
 </div>
 
 <div class="container">
@@ -513,6 +513,13 @@ function saveLoginPrefs(id, pw) {
     localStorage.removeItem('earning_saved_id');
     localStorage.removeItem('earning_saved_pw');
   }
+}
+
+
+function doLogout() {
+  localStorage.removeItem('earning_auto_login');
+  localStorage.removeItem('earning_saved_pw');
+  location.reload();
 }
 
 // 로그인 후 renderAll() 호출됨
