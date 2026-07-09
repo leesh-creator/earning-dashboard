@@ -237,6 +237,7 @@ function renderMetrics(f){
   const cum=f.cum_rets[f.cum_rets.length-1];
   const daily=f.daily_rets[f.daily_rets.length-1];
   const nav=f.navs[f.navs.length-1];
+  const prevNav=f.navs.length>1?f.navs[f.navs.length-2]:null;
   const r1m=f.period_rets['1M']??0;
   const r3m=f.period_rets['3M']??0;
   const ytd=f.period_rets['YTD']??0;
@@ -245,6 +246,7 @@ function renderMetrics(f){
       <div class="metric-label">수정기준가 (NAV)</div>
       <div class="metric-value">${Number(nav).toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
       <div class="metric-sub ${clsCss(daily)}">전일대비 ${fmt(daily)}</div>
+      ${prevNav!=null?`<div class="metric-sub">전일 기준가 ${Number(prevNav).toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>`:''}
     </div>
     <div class="metric">
       <div class="metric-label">설정이후 누적수익률</div>
